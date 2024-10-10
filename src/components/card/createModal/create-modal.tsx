@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { FoodData } from "../../../interface/FoodData";
 import { useFoodDataMutate } from "../../../hooks/useFoodDataMutate";
 import "./Modal.css";
 
