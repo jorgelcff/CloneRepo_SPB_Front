@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Cardapio</h1>
+      <h1>Bem Me Quer</h1>
       <div className="card-grid">
           {data?.map(foodData =>
           <Card 
