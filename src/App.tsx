@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import { Card } from './components/card/card';
-import { FoodData } from './interface/FoodData';
 import { useFoodData } from './hooks/useFoodData';
 import { CreateModal } from './components/card/createModal/create-modal';
 
