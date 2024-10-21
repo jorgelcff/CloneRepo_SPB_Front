@@ -156,7 +156,7 @@ body{
   justify-content: center; 
 }
 
-/* .promo-link {
+.promo-link {
   display: inline-block;
   padding: 10px 20px;
   border-radius: 5px;
@@ -164,8 +164,8 @@ body{
   color: #fff;
   background-color: #999AD2; 
   transition: background-color 0.3s ease;
-  font-size: 16px; /
-} */
+  font-size: 16px;
+}
 
 .promo-link:hover {
   background-color: #B8B1DB;
