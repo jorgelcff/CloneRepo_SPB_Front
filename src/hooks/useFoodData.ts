@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosPromise } from "axios";
 import { FoodData } from "../interface/FoodData";
 
-const API_URL = 'https://springbootcaldback-1nrahgbs.b4a.run';
+const API_URL = '{API_URL}';
 
 const fetchData = async (): AxiosPromise<FoodData[]> => {
     const response = axios.get(API_URL + '/food');
