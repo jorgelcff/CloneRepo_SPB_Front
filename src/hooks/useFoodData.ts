@@ -5,8 +5,6 @@ import { FoodData } from "../interface/FoodData";
 // Pega a URL da variável de ambiente
 const API_URL = import.meta.env.VITE_API_URL;
 
-console.log(API_URL); // Verificação opcional
-
 const fetchData = async (): AxiosPromise<FoodData[]> => {
     const response = await axios.get(`${API_URL}/food`);
     return response;
