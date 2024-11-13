@@ -10,8 +10,8 @@ import Products from "./pages/products";
 import Orders from "./pages/orders";
 
 function App() {
-  const token = localStorage.getItem("token");
-  const isAuthenticated = token ? true : false;
+  // const token = localStorage.getItem("token");
+  const isAuthenticated = true;
   return (
     <Router>
       <Routes>

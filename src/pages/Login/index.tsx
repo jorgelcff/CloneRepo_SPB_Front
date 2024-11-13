@@ -32,9 +32,9 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await authService.login(email, password);
-
-      if (response.token) {
+      // const response = await authService.login(email, password);
+      const trueSession = true;
+      if (trueSession) {
         // alert.success("Login efetuado com sucesso!");
         if (isMounted) {
           setIsSubmitting(false);
@@ -44,8 +44,8 @@ const Login: React.FC = () => {
             id: 1,
             uuid: "2fe3b466-df69-4957-a18b-86d854c5ee56",
             empresaId: -1,
-            nome: "Jorge Freitas",
-            email: "jorge@gmail.com",
+            nome: "Bianca",
+            email: "bianca@gmail.com",
             dataCriacao: "2024-11-01T02:02:45.350Z",
             dataUltimoAcesso: "2024-11-01T02:02:47.508Z",
             dataAtualizacao: "2024-11-01T02:02:47.510Z",
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
         };
         localStorage.setItem("user", JSON.stringify(user));
 
-        navigation("/dashboard");
+        navigation("/admin/dashboard");
       }
     } catch {
       // console.error(error);

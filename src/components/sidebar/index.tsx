@@ -36,6 +36,8 @@ const Sidebar: React.FC = () => {
             <NavLink
               to="/admin/products"
               className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={(e) => e.preventDefault()}
+              style={{ pointerEvents: "none", color: "gray" }}
             >
               Produtos
             </NavLink>
