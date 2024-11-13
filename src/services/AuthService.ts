@@ -1,7 +1,7 @@
 import HttpService from "./HttpService";
 
 interface LoginResponse {
-  access_token: string;
+  token: string;
   user: unknown;
 }
 
@@ -17,8 +17,8 @@ class AuthService extends HttpService {
       email,
       password,
     });
-    if (response.access_token) {
-      localStorage.setItem("token", response.access_token);
+    if (response.token) {
+      localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user));
     }
     return response;

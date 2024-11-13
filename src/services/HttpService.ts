@@ -7,9 +7,11 @@ import axios, {
 class HttpService {
   private api: AxiosInstance;
 
+  private url: string = import.meta.env.VITE_API_URL || "http://localhost:3001";
+
   constructor(baseURL?: string) {
     this.api = axios.create({
-      baseURL: baseURL,
+      baseURL: baseURL ? baseURL : this.url,
     });
 
     this.api.interceptors.request.use(

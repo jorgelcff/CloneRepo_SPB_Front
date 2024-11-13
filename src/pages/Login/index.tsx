@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import ImageLight from "../assets/img/login-office.jpeg";
 // import ImageDark from "../assets/img/login-office-dark.jpeg";
-// import AuthService from "../../services/AuthService";
+import AuthService from "../../services/AuthService";
 // import { useAlert } from "react-alert";
 import "./styles.css";
 
-// const authService = new AuthService();
+const authService = new AuthService();
 
 const Login: React.FC = () => {
   const [isMounted, setIsMounted] = useState(true);
@@ -32,12 +32,9 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // const response = await authService.login(email, password);
+      const response = await authService.login(email, password);
 
-      const response = {
-        access_token: true,
-      };
-      if (response.access_token) {
+      if (response.token) {
         // alert.success("Login efetuado com sucesso!");
         if (isMounted) {
           setIsSubmitting(false);
