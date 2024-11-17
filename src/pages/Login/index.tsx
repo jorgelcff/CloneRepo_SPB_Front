@@ -1,10 +1,6 @@
-// src/pages/Login.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import ImageLight from "../assets/img/login-office.jpeg";
-// import ImageDark from "../assets/img/login-office-dark.jpeg";
 import AuthService from "../../services/AuthService";
-// import { useAlert } from "react-alert";
 import "./styles.css";
 
 const authService = new AuthService();
@@ -14,7 +10,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [error, setError] = useState("");
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -24,49 +20,26 @@ const Login: React.FC = () => {
     };
   }, []);
 
-  // const alert = useAlert();
-  // const navigate = useNavigate();
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // const response = await authService.login(email, password);
-      const trueSession = true;
-      if (trueSession) {
-        // alert.success("Login efetuado com sucesso!");
+      const response = await authService.login(email, password);
+      if (response.access_token) {
         if (isMounted) {
           setIsSubmitting(false);
         }
-        const user = {
-          user: {
-            id: 1,
-            uuid: "2fe3b466-df69-4957-a18b-86d854c5ee56",
-            empresaId: -1,
-            nome: "Bianca",
-            email: "bianca@gmail.com",
-            dataCriacao: "2024-11-01T02:02:45.350Z",
-            dataUltimoAcesso: "2024-11-01T02:02:47.508Z",
-            dataAtualizacao: "2024-11-01T02:02:47.510Z",
-            ativo: true,
-            dataDeletado: null,
-            role: "SUPERADMIN",
-          },
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvcmdlQGdtYWlsLmNvbSIsInN1YiI6MSwiaWF0IjoxNzMxMzYzNjQwfQ.jBKxp-JbLE79rCY4Ifihh6lmCChJHO1u-ZNSNOFIiLA",
-        };
-        localStorage.setItem("user", JSON.stringify(user));
 
-        navigation("/admin/dashboard");
+        if (response.user.role === "ADMIN") {
+          navigation("/admin/dashboard");
+        } else navigation("/");
       }
     } catch {
-      // console.error(error);
-      // if (error.code === "ERR_BAD_REQUEST") {
-      //   alert.error("Credenciais Incorretas!");
-      // } else {
-      //   alert.error("Erro do Servidor.");
-      // }
+      console.error(error);
+      if (isMounted) {
+        setError("Email ou senha inválidos");
+      }
     }
 
     if (isMounted) {
@@ -110,6 +83,7 @@ const Login: React.FC = () => {
                   required
                 />
               </div>
+              {error && <p className="error-message">{error}</p>}
               <button
                 type="submit"
                 className="login-button"

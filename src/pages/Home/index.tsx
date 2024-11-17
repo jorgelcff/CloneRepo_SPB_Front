@@ -3,6 +3,8 @@ import "./styles.css";
 import { Card } from "../../components/card/card";
 import { useFoodData } from "../../hooks/useFoodData";
 import { CreateModal } from "../../components/card/createModal/create-modal";
+import { Link } from "react-router-dom";
+import Header from "../../components/Header";
 
 const Home: React.FC = () => {
   const { data } = useFoodData();
@@ -14,7 +16,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
-      <a href="#" className="logo-container">
+      <Header />
+      {/* <a href="#" className="logo-container">
         <img
           src="https://front-bmq.vercel.app/midia/logo2.png"
           className="logo"
@@ -51,6 +54,7 @@ const Home: React.FC = () => {
           </form>
         </div>
       </section>
+       */}
       <section className="promo-section background-image">
         <div className="promo-content">
           <h1 className="promo-title">Melu</h1>

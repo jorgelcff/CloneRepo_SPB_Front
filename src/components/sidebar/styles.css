@@ -61,3 +61,23 @@
   width: 150px;
   object-fit: contain;
 }
+
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.sidebar-footer button {
+  width: -webkit-fill-available;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #999ad2;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-footer button:hover {
+  background-color: #777;
+}

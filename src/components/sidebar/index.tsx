@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
           src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
           alt="Avatar"
         />
-        <h3>{user.user.nome}</h3>
+        <h3>{user.name}</h3>
       </div>
       <nav>
         <ul>
@@ -52,6 +52,17 @@ const Sidebar: React.FC = () => {
           </li>
         </ul>
       </nav>
+
+      <footer className="sidebar-footer">
+        <button
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/";
+          }}
+        >
+          Logout
+        </button>
+      </footer>
     </div>
   );
 };

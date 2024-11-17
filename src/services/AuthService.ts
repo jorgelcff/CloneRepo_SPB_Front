@@ -1,8 +1,14 @@
 import HttpService from "./HttpService";
 
 interface LoginResponse {
-  token: string;
-  user: unknown;
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    role: string;
+    name: string;
+    telefone: string;
+  };
 }
 
 interface RegisterData {
@@ -17,8 +23,8 @@ class AuthService extends HttpService {
       email,
       password,
     });
-    if (response.token) {
-      localStorage.setItem("token", response.token);
+    if (response.access_token) {
+      localStorage.setItem("access_token", response.access_token);
       localStorage.setItem("user", JSON.stringify(response.user));
     }
     return response;
