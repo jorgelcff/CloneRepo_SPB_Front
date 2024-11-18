@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 import CartService from "../../services/CartService";
+import Spinner from "../Spinner";
 
 const cartService = new CartService();
 
@@ -44,6 +45,7 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
   const [priceTotal, setPriceTotal] = useState(0);
   const [qtdItens, setQtdItens] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   // Função para obter os detalhes do produto
   const getProductDetails = (productId: string) =>
@@ -79,13 +81,29 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
 
     try {
       const response = await cartService.checkout(cart.id, { address: " " });
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       if (response) {
-        alert("Compra finalizada com sucesso!");
+        setIsRedirecting(true);
+        setTimeout(() => {
+          const whatsappMessage = `Pedido realizado com sucesso! Total de Itens: ${qtdItens} Valor Total: R$${priceTotal.toFixed(
+            2
+          )}.\n\nInformações do Pedido:\nID do Pedido: ${
+            cart.id
+          }\n\nInformações do Usuário:\nNome: ${user.name}\n`;
+          const whatsappNumber = import.meta.env.VITE_WPP_NUMBER;
+          const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+            whatsappMessage
+          )}`;
+          window.open(whatsappUrl, "_blank");
+        }, 3000);
+        setIsRedirecting(false);
       }
     } catch (error) {
       console.error(error);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -121,6 +139,8 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
                   </div>
                   <div className="item-actions">
                     <button
+                      disabled={true}
+                      style={{ cursor: "not-allowed" }}
                       onClick={() =>
                         updateItem(item.productId, item.quantity + 1)
                       }
@@ -128,13 +148,19 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
                       +
                     </button>
                     <button
+                      disabled={true}
+                      style={{ cursor: "not-allowed" }}
                       onClick={() =>
                         updateItem(item.productId, item.quantity - 1)
                       }
                     >
                       -
                     </button>
-                    <button onClick={() => removeItem(item.productId)}>
+                    <button
+                      disabled={true}
+                      style={{ cursor: "not-allowed" }}
+                      onClick={() => removeItem(item.productId)}
+                    >
                       Remover
                     </button>
                     <button onClick={() => setSelectedProduct(item.product)}>
@@ -163,6 +189,16 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
             <button onClick={() => setSelectedProduct(null)}>Fechar</button>
           </div>
         </>
+      )}
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <p>Finalizando compra...</p>
+            <h5>Por favor, aguarde, a venda será finalizada via Whatsapp</h5>
+            <Spinner />
+            <p>{isRedirecting ?? "Redirecionando para o WhatsApp..."}</p>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,4 @@
 import HttpService from "./HttpService";
-import { response } from "../utils/demo/tableData";
 
 interface LoginResponse {
   access_token: string;

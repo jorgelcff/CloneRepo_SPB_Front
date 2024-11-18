@@ -165,3 +165,21 @@
   background-color: #025aa5;
   transform: translateY(-3px);
 }
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-overlay .loading-content {
+  text-align: center;
+  color: white;
+}

@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
+import UserService from "../../services/UserService";
+import Skeleton from "../../components/skeleton";
 
 type Legend = {
   title: string;
@@ -17,32 +19,81 @@ const lineLegends: Legend[] = [
   { title: "Pago", color: "bg-purple-600" },
 ];
 
+const userService = new UserService();
 function Dashboard() {
   useEffect(() => {
     document.title = "Dashboard - BMQ";
   }, []);
+
+  const [dashboardData, setDashboardData] = useState<{
+    totalUsers: number;
+    totalOrdersCompleted: number;
+    totalOrdersPending: number;
+    totalSales: number;
+  }>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  useEffect(() => {
+    getDashboardData();
+  }, []);
+
+  const getDashboardData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await userService.dashboard(user.id);
+      setDashboardData(response.dashboard);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+    console.log(dashboardData);
+  };
   return (
     <div className="c">
       <div className="dashboard">
         <div className="card-grid">
-          <div className="info-card">
-            <h3>Clientes</h3>
-            <p>6389</p>
-          </div>
-          <div className="info-card">
-            <h3>Faturamento</h3>
-            <p>R$46,760.89</p>
-          </div>
-          <div className="info-card">
-            <h3>Vendas Mensais</h3>
-            <p>376</p>
-          </div>
-          <div className="info-card">
-            <h3>Contratos Pendentes</h3>
-            <p>35</p>
-          </div>
+          {isLoading ? (
+            <>
+              <div className="info-card">
+                <Skeleton className="short" />
+                <Skeleton className="long" />
+              </div>
+              <div className="info-card">
+                <Skeleton className="short" />
+                <Skeleton className="long" />
+              </div>
+              <div className="info-card">
+                <Skeleton className="short" />
+                <Skeleton className="long" />
+              </div>
+              <div className="info-card">
+                <Skeleton className="short" />
+                <Skeleton className="long" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="info-card">
+                <h3>Clientes</h3>
+                <p>{dashboardData?.totalUsers}</p>
+              </div>
+              <div className="info-card">
+                <h3>Faturamento</h3>
+                <p>R${dashboardData?.totalSales}</p>
+              </div>
+              <div className="info-card">
+                <h3>Vendas Mensais</h3>
+                <p>{dashboardData?.totalOrdersCompleted}</p>
+              </div>
+              <div className="info-card">
+                <h3>Contratos Pendentes</h3>
+                <p>{dashboardData?.totalOrdersPending}</p>
+              </div>
+            </>
+          )}
         </div>
-
         <div className="chart-grid">
           <div className="chart-card">
             <h2>Receita</h2>
