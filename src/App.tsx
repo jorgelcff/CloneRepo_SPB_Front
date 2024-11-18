@@ -8,41 +8,29 @@ import NotFound from "./pages/404";
 import Layout from "./components/layout";
 import Products from "./pages/products";
 import Orders from "./pages/orders";
+import CartPage from "./pages/Cart";
+import UserLayout from "./components/layout-user";
 
 function App() {
-  const token = localStorage.getItem("access_token");
-  const user = JSON.parse(localStorage.getItem("user")!);
-  const isAuthenticated = !!token;
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/dashboard"
-          element={
-            <ProtectedRoute
-              isAuthenticated={isAuthenticated}
-              element={<Dashboard />}
-            />
-          }
+          element={<ProtectedRoute element={<Dashboard />} />}
         />
-        <Route path="/skincare" element={<div>Skincare Page</div>} />
-        <Route path="/pele" element={<div>Pele Page</div>} />
-        <Route path="/olhos" element={<div>Olhos Page</div>} />
-        <Route path="/boca" element={<div>Boca Page</div>} />
-        <Route path="/vegan" element={<div>Vegan Page</div>} />
-        <Route path="/cart" element={<div>Cart Page</div>} />
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/skincare" element={<div>Skincare Page</div>} />
+          <Route path="/pele" element={<div>Pele Page</div>} />
+          <Route path="/olhos" element={<div>Olhos Page</div>} />
+          <Route path="/boca" element={<div>Boca Page</div>} />
+          <Route path="/vegan" element={<div>Vegan Page</div>} />
+        </Route>
 
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute
-              isAuthenticated={isAuthenticated && user.role === "ADMIN"}
-              element={<Layout />}
-            />
-          }
-        >
+        <Route path="/admin" element={<ProtectedRoute element={<Layout />} />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />

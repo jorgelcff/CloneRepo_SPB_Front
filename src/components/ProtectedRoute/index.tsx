@@ -3,14 +3,23 @@ import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
   element: React.ReactElement;
-  isAuthenticated: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  element,
-  isAuthenticated,
-}) => {
-  return isAuthenticated ? element : <Navigate to="/login" />;
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
+  const isAuthenticated = !!localStorage.getItem("access_token");
+  const user = JSON.parse(localStorage.getItem("user")!);
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("user", user);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (user.role !== "ADMIN") {
+    return <Navigate to="/not-authorized" />;
+  }
+
+  return element;
 };
 
 export default ProtectedRoute;

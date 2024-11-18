@@ -1,21 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { User } from "../../interface/user";
-import { response } from "../../utils/demo/tableData";
+import React, { useEffect, useState } from "react"; // Ou faça uma requisição à API
 import "./styles.css";
-import OrderModal, { Order } from "../../components/modal-orders";
+import OrderModal from "../../components/modal-orders";
+import OrderService from "../../services/OrderService";
+import { Orders as OrderResponse, Order } from "../../interface/Order";
+
+const orderService = new OrderService();
 
 const Orders: React.FC = () => {
   const [page, setPage] = useState<number>(1);
-  const [data, setData] = useState<User[]>([]);
+  const [data, setData] = useState<OrderResponse>(); // Altere para o tipo Order
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | undefined>(
     undefined
   );
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddOrder = () => {
-    setSelectedOrder(undefined);
-    setIsModalOpen(true);
+  const user = JSON.parse(localStorage.getItem("user")!);
+
+  useEffect(() => {
+    getOrdersData();
+  }, []);
+
+  const getOrdersData = async () => {
+    setIsLoading(true);
+    try {
+      const response: OrderResponse = await orderService.getOrdersAdmin(
+        user.id
+      );
+      setData(response);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
   };
+
+  // const handleAddOrder = () => {
+  //   setSelectedOrder(undefined);
+  //   setIsModalOpen(true);
+  // };
 
   const handleEditOrder = (order: Order) => {
     setSelectedOrder(order);
@@ -23,14 +45,39 @@ const Orders: React.FC = () => {
   };
 
   const handleSaveOrder = (order: Order) => {
-    // Lógica para salvar o pedido (adição ou edição)
-    console.log("Pedido salvo:", order);
+    if (order.id) {
+      // Atualiza o pedido
+      orderService
+        .updateOrderStatus(user.id, order.id, order.status)
+        .then(() => {
+          getOrdersData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      // Cria um novo pedido
+      orderService
+        .createOrder(user.id, {
+          items: order.products.map((product) => ({
+            productId: product.id,
+            quantity: product.quantity,
+          })),
+        })
+        .then(() => {
+          getOrdersData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
+
   const resultsPerPage = 5;
-  const totalResults = response.length;
+  const totalResults = data?.length;
 
   useEffect(() => {
-    setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+    setData(data?.slice((page - 1) * resultsPerPage, page * resultsPerPage));
   }, [page]);
 
   const onPageChange = (p: number) => {
@@ -39,28 +86,25 @@ const Orders: React.FC = () => {
 
   const addClassByStatus = (status: string): string => {
     switch (status) {
-      case "primary":
-        return "status-primary";
-      case "danger":
-        return "status-danger";
-      case "success":
+      case "PENDING":
+        return "status-pendding";
+      case "COMPLETED":
         return "status-success";
-      case "warning":
-        return "status-warning";
-      case "neutral":
-        return "status-neutral";
+      case "CANCELED":
+        return "status-danger";
       default:
-        return "";
+        return "status-neutral";
     }
   };
+
   return (
     <div>
       <div className="table-container">
         <div className="table-header">
           <h2>Pedidos</h2>
-          <button className="add-button" onClick={handleAddOrder}>
+          {/* <button className="add-button" onClick={handleAddOrder}>
             Adicionar Pedido
-          </button>
+          </button> */}
         </div>
         <table className="table">
           <thead>
@@ -69,56 +113,75 @@ const Orders: React.FC = () => {
               <th>Valor</th>
               <th>Status</th>
               <th>Data</th>
-              <th>Ação</th>
+              <th className="fit">Ação</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((user, i) => (
-              <tr key={i}>
-                <td>
-                  <div className="user-info">
-                    <img
-                      src={user.avatar}
-                      alt="User avatar"
-                      className="avatar"
-                    />
-                    <div>
-                      <p>{user.name}</p>
+            {isLoading ? (
+              <>
+                {[...Array(5)].map((_, i) => (
+                  <tr key={i}>
+                    <td>
+                      <div className="user-info">
+                        <div className="skeleton short"></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="skeleton medium"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton short"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton medium"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton long"></div>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            ) : (
+              data?.map((order, i) => (
+                <tr key={i}>
+                  <td>
+                    <div className="user-name">
+                      <p>{order.user.name}</p> {/* Exibe o nome do usuário */}
                     </div>
-                  </div>
-                </td>
-                <td>${user.amount.toFixed(2)}</td>
-                <td>
-                  {" "}
-                  <span
-                    className={`badge ${addClassByStatus(user.status)}`}
-                    data-tooltip={user.status}
-                  ></span>
-                </td>
-
-                <td>{new Date(user.date).toLocaleDateString()}</td>
-                <td>
-                  <button
-                    className="action-button-edit"
-                    onClick={() => handleEditOrder(user)}
-                  >
-                    Edit
-                  </button>
-                  <button className="action-button-delete">Delete</button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td>R${order.total.toFixed(2)}</td>{" "}
+                  {/* Exibe o valor total do pedido */}
+                  <td>
+                    <span
+                      className={`badge ${addClassByStatus(order.status)}`}
+                      data-tooltip={order.status}
+                    ></span>
+                  </td>
+                  <td>{new Date(order.createdAt).toLocaleDateString()}</td>{" "}
+                  {/* Exibe a data de criação */}
+                  <td className="fit">
+                    <button
+                      className="action-button-edit"
+                      onClick={() => handleEditOrder(order)}
+                    >
+                      Editar
+                    </button>
+                    <button className="action-button-delete">Excluir</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div className="pagination">
           <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>
-            Previous
+            Anterior
           </button>
           <button
             onClick={() => onPageChange(page + 1)}
-            disabled={page * resultsPerPage >= totalResults}
+            disabled={page * resultsPerPage >= totalResults!}
           >
-            Next
+            Próximo
           </button>
         </div>
       </div>

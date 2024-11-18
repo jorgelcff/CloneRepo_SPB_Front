@@ -15,7 +15,7 @@ body {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
 }
-
+/* 
 .container button {
   background-color: #0275d8;
   color: white;
@@ -29,7 +29,7 @@ body {
 .container button:hover {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 7px 0px;
   transform: scale(1.1);
-}
+} */
 
 /* Style da BMQ: */
 

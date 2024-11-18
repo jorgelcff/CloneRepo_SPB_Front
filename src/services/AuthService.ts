@@ -24,8 +24,8 @@ class AuthService extends HttpService {
       password,
     });
     if (response.access_token) {
-      localStorage.setItem("access_token", response.access_token);
       localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("access_token", response.access_token);
     }
     return response;
   }

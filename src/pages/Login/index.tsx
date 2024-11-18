@@ -30,8 +30,10 @@ const Login: React.FC = () => {
         if (isMounted) {
           setIsSubmitting(false);
         }
-
+        console.log(response);
+        console.log(response.user.role === "ADMIN");
         if (response.user.role === "ADMIN") {
+          console.log();
           navigation("/admin/dashboard");
         } else navigation("/");
       }

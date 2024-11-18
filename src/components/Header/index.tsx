@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
 const Header: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user")!);
+
+  const [showLogout, setShowLogout] = useState(false);
+
+  const handleUserClick = () => {
+    setShowLogout(!showLogout);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
 
   return (
     <header className="header">
@@ -34,21 +45,13 @@ const Header: React.FC = () => {
         </ul>
       </nav>
       <div className="navbar-container">
-        <form className="search-form" action="#" method="get">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Pesquisar..."
-          />
-        </form>
-      </div>
-      <div className="user-info">
         {user ? (
           <div className="user-details">
             <img
               className="user-avatar"
               src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
               alt="Avatar"
+              onClick={handleUserClick}
             />
             <span className="user-name"> Olá, {user.name}</span>
             <Link to="/cart" className="cart-icon">
@@ -57,6 +60,11 @@ const Header: React.FC = () => {
                 alt="Cart"
               />
             </Link>
+            {showLogout && (
+              <button className="logout-button" onClick={handleLogout}>
+                Deslogar
+              </button>
+            )}
           </div>
         ) : (
           <div className="login-link">

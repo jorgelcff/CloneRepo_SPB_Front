@@ -37,7 +37,7 @@
 }
 
 /* Informações de usuário com avatar */
-.user-info {
+.table .user-name {
   display: flex;
   align-items: center;
 }
@@ -107,8 +107,8 @@
 }
 
 
-.status-primary {
-  background-color: blue;
+.status-pendding {
+  background: orange;
 }
 
 .status-danger {
@@ -116,7 +116,7 @@
 }
 
 .status-success {
-  background-color: green;
+  background-color: #999ad2;
 }
 
 .status-warning {
@@ -180,4 +180,38 @@
 
 .action-button-delete:hover {
   background-color: #e53935; /* Vermelho escuro */
+}
+
+/* src/components/OrderTable.css */
+.skeleton {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  display: inline-block;
+  height: 20px;
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton.short {
+  width: 50%;
+}
+
+.skeleton.medium {
+  width: 75%;
+}
+
+.skeleton.long {
+  width: 100%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
 }

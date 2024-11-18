@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 interface Product {
-  id?: number;
+  id?: string;
   name: string;
-  price: number;
   description: string;
+  image: string;
+  price: number;
+  stock: number;
+  categoryId: string;
 }
 
 interface ProductModalProps {
@@ -22,24 +25,41 @@ const ProductModal: React.FC<ProductModalProps> = ({
   product,
 }) => {
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
+  const [categoryId, setCategoryId] = useState("");
 
   useEffect(() => {
     if (product) {
       setName(product.name);
-      setPrice(product.price);
       setDescription(product.description);
+      setImage(product.image);
+      setPrice(product.price);
+      setStock(product.stock);
+      setCategoryId(product.categoryId);
     } else {
       setName("");
-      setPrice(0);
       setDescription("");
+      setImage("");
+      setPrice(0);
+      setStock(0);
+      setCategoryId("");
     }
   }, [product]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ id: product?.id, name, price, description });
+    onSave({
+      id: product?.id,
+      name,
+      description,
+      image,
+      price,
+      stock,
+      categoryId,
+    });
     onClose();
   };
 
@@ -61,21 +81,53 @@ const ProductModal: React.FC<ProductModalProps> = ({
             />
           </div>
           <div className="input-group">
-            <label htmlFor="price">Preço</label>
-            <input
-              type="number"
-              id="price"
-              value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
-              required
-            />
-          </div>
-          <div className="input-group">
             <label htmlFor="description">Descrição</label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="image">Imagem</label>
+            <input
+              type="text"
+              id="image"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group-row">
+            <div className="input-group">
+              <label htmlFor="price">Preço</label>
+              <input
+                type="number"
+                id="price"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="stock">Estoque</label>
+              <input
+                type="number"
+                id="stock"
+                value={stock}
+                onChange={(e) => setStock(Number(e.target.value))}
+                required
+              />
+            </div>
+          </div>
+          <div className="input-group">
+            <label htmlFor="categoryId">Categoria</label>
+            <input
+              type="text"
+              id="categoryId"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
               required
             />
           </div>
