@@ -1,15 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
 import { Card } from "../../components/card/card";
-import { useFoodData } from "../../hooks/useFoodData";
-import { CreateModal } from "../../components/card/createModal/create-modal";
+import ProductService from "../../services/ProductSerivce";
+
+const productService = new ProductService();
 
 const Home: React.FC = () => {
-  const { data } = useFoodData();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [cart, setCart] = useState<any[]>([]);
 
-  const handleOpenModal = () => {
-    setIsModalOpen((prev) => !prev);
+  useEffect(() => {
+    getProductsData();
+  }, []);
+
+  const getProductsData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await productService.getAllProducts();
+      setData(response);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
+  const addToCart = (product: any) => {
+    setCart((prevCart) => {
+      // Verifica se o produto já está no carrinho
+      const existingProduct = prevCart.find((item) => item.id === product.id);
+
+      if (existingProduct) {
+        // Atualiza a quantidade do produto existente
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+
+      // Adiciona o novo produto ao carrinho
+      return [...prevCart, { ...product, quantity: 1 }];
+    });
   };
 
   return (
@@ -42,18 +74,21 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-      <div className="card-grid">
-        {data?.map((foodData) => (
-          <Card
-            key={foodData.id}
-            price={foodData.price}
-            title={foodData.title}
-            image={foodData.image}
-          />
-        ))}
-      </div>
-      {isModalOpen && <CreateModal closeModal={handleOpenModal} />}
-      {/* <button onClick={handleOpenModal}>novo</button> */}
+      {isLoading ? (
+        <div className="spinner">Loading...</div>
+      ) : (
+        <div className="card-grid-items">
+          {data.map((product) => (
+            <Card
+              key={product.id}
+              title={product.name}
+              price={product.price}
+              image={product.image}
+              onAddToCart={() => addToCart(product)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

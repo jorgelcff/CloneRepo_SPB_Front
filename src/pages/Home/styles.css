@@ -10,10 +10,16 @@ body {
   width: 100vw;
 }
 
-.card-grid {
+.card-grid-items {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(
+    4,
+    minmax(200px, 1fr)
+  ); /* Ajuste para responsividade */
+  width: 80%;
   gap: 16px;
+  min-height: 100vh;
+  margin: 0 auto; /* Centraliza a grade */
 }
 /* 
 .container button {
@@ -215,4 +221,22 @@ body {
 
 .buy-button:hover {
   background-color: #b8b1db;
+}
+
+.spinner {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #999ad2; /* Purple */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
