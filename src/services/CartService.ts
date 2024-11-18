@@ -61,6 +61,10 @@ class CartService extends HttpService {
   clearCart(userId: string) {
     return this.delete(`/cart/${userId}`);
   }
+
+  checkout(cartId: string, data: { address: string }) {
+    return this.post(`/cart/${cartId}/checkout`, data);
+  }
 }
 
 export default CartService;

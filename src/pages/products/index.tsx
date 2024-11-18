@@ -15,6 +15,10 @@ const Products: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user")!);
 
   useEffect(() => {
+    document.title = "Admin Produtos - BMQ";
+  }, []);
+
+  useEffect(() => {
     getProductsData();
   }, []);
 

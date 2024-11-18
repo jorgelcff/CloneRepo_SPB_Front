@@ -4,6 +4,7 @@ import "./styles.css";
 import CartService from "../../services/CartService";
 import CartItems from "../../components/cart-items";
 import OrderHistory from "../../components/order-items";
+import Spinner from "../../components/Spinner";
 
 const cartService = new CartService();
 
@@ -87,7 +88,16 @@ const CartPage: React.FC = () => {
       </div>
       <div className="tab-content">
         {isLoading ? (
-          <p>Carregando...</p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Spinner />
+          </div>
         ) : activeTab === "cart" ? (
           <CartItems cart={cart} products={cart.products} />
         ) : (

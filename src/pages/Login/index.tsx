@@ -14,6 +14,10 @@ const Login: React.FC = () => {
   const navigation = useNavigate();
 
   useEffect(() => {
+    document.title = "Login - BMQ";
+  }, []);
+
+  useEffect(() => {
     setIsMounted(true);
     return () => {
       setIsMounted(false);
@@ -94,11 +98,10 @@ const Login: React.FC = () => {
                 {isSubmitting ? "Entrando..." : "Entrar"}
               </button>
             </form>
-            <p>
-              <Link to="/forgot-password" className="forgot-password-link">
-                Esqueceu a senha?
-              </Link>
-            </p>
+            <p className="register">Ainda não tem uma conta?</p>
+            <Link to="/register" className="forgot-password-link">
+              Cadastre-se
+            </Link>
           </div>
         </main>
       </div>

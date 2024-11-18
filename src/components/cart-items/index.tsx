@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
+import CartService from "../../services/CartService";
+
+const cartService = new CartService();
 
 interface CartProduct {
   id: string;
@@ -31,7 +34,7 @@ interface CartProps {
     id: string;
     products: CartProduct[];
   };
-  products: ProductDetails[];
+  products?: ProductDetails[];
 }
 
 const CartItems: React.FC<CartProps> = ({ cart, products }) => {
@@ -40,10 +43,11 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
   );
   const [priceTotal, setPriceTotal] = useState(0);
   const [qtdItens, setQtdItens] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Função para obter os detalhes do produto
   const getProductDetails = (productId: string) =>
-    products.find((product) => product.id === productId);
+    products?.find((product) => product.id === productId);
 
   // Atualiza os totais de preço e quantidade sempre que o carrinho muda
   useEffect(() => {
@@ -70,6 +74,20 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
     console.log("Update item", productId, quantity);
   };
 
+  const handleSubmmit = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await cartService.checkout(cart.id, { address: " " });
+
+      if (response) {
+        alert("Compra finalizada com sucesso!");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="cart-items">
       {cart?.products?.length === 0 ? (
@@ -82,8 +100,11 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
             <p>Total de Itens: {qtdItens}</p>
             <p>Valor Total: R${priceTotal.toFixed(2)}</p>
           </div>
+          <div className="finalizar-venda">
+            <button onClick={() => handleSubmmit()}>Finalizar Compra</button>
+          </div>
           <div className="cart-items">
-            {cart.products.map((item) => {
+            {cart.products?.map((item) => {
               const product = getProductDetails(item.productId);
               return (
                 <div key={item.id} className="cart-item">
@@ -124,9 +145,6 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
               );
             })}
           </div>
-          <div className="finalizar-venda">
-            <button>Finalizar Compra</button>
-          </div>
         </div>
       )}
       {selectedProduct && (
@@ -135,10 +153,12 @@ const CartItems: React.FC<CartProps> = ({ cart, products }) => {
             className="modal-overlay"
             onClick={() => setSelectedProduct(null)}
           ></div>
-          <div className="modal">
+          <div className="modal-cart">
             <h3>{selectedProduct.name}</h3>
+            <div className="img-box">
+              <img src={selectedProduct.image} alt={selectedProduct.name} />
+            </div>
             <p>{selectedProduct.description}</p>
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
             <p>Preço unitário: R${selectedProduct.price}</p>
             <button onClick={() => setSelectedProduct(null)}>Fechar</button>
           </div>

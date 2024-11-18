@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
     return <Navigate to="/login" />;
   }
 
-  if (user.role !== "ADMIN") {
+  if (window.location.pathname.startsWith("/admin") && user.role !== "ADMIN") {
     return <Navigate to="/not-authorized" />;
   }
 

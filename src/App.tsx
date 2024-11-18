@@ -10,19 +10,24 @@ import Products from "./pages/products";
 import Orders from "./pages/orders";
 import CartPage from "./pages/Cart";
 import UserLayout from "./components/layout-user";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/dashboard"
           element={<ProtectedRoute element={<Dashboard />} />}
         />
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<CartPage />} />
+          <Route
+            path="/cart"
+            element={<ProtectedRoute element={<CartPage />} />}
+          />
           <Route path="/skincare" element={<div>Skincare Page</div>} />
           <Route path="/pele" element={<div>Pele Page</div>} />
           <Route path="/olhos" element={<div>Olhos Page</div>} />

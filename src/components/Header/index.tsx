@@ -16,6 +16,8 @@ const Header: React.FC = () => {
     window.location.href = "/login";
   };
 
+  const disableLinks = true;
+
   return (
     <header className="header">
       <div className="logo-container">
@@ -23,24 +25,46 @@ const Header: React.FC = () => {
           src="https://front-bmq.vercel.app/midia/logo2.png"
           className="logo"
           alt="Logo Bem me quer"
+          onClick={() => (window.location.href = "/")}
+          style={{ cursor: "pointer" }}
         />
       </div>
       <nav className="navbar-container">
         <ul className="navbar">
           <li>
-            <Link to="/skincare">Skincare</Link>
+            {disableLinks ? (
+              <span className="disabled">Skincare</span>
+            ) : (
+              <Link to="/skincare">Skincare</Link>
+            )}
           </li>
           <li>
-            <Link to="/pele">Pele</Link>
+            {disableLinks ? (
+              <span className="disabled">Pele</span>
+            ) : (
+              <Link to="/pele">Pele</Link>
+            )}
           </li>
           <li>
-            <Link to="/olhos">Olhos</Link>
+            {disableLinks ? (
+              <span className="disabled">Olhos</span>
+            ) : (
+              <Link to="/olhos">Olhos</Link>
+            )}
           </li>
           <li>
-            <Link to="/boca">Boca</Link>
+            {disableLinks ? (
+              <span className="disabled">Boca</span>
+            ) : (
+              <Link to="/boca">Boca</Link>
+            )}
           </li>
           <li>
-            <Link to="/vegan">Vegan</Link>
+            {disableLinks ? (
+              <span className="disabled">Vegan</span>
+            ) : (
+              <Link to="/vegan">Vegan</Link>
+            )}
           </li>
         </ul>
       </nav>

@@ -1,8 +1,5 @@
-// import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./styles.css";
-// import { response } from "../../utils/demo/tableData.ts";
-// import { User } from "../../interface/user.js";
-// import Tabs, { Tab } from "../../components/tabs";
 
 type Legend = {
   title: string;
@@ -20,84 +17,10 @@ const lineLegends: Legend[] = [
   { title: "Pago", color: "bg-purple-600" },
 ];
 
-// type ChartOptions = {
-//   data: {
-//     datasets: { data: number[]; backgroundColor: string[]; label: string }[];
-//     labels: string[];
-//   };
-//   options: { responsive: boolean; cutoutPercentage?: number };
-// };
-
-// const doughnutOptions: ChartOptions = {
-//   data: {
-//     datasets: [
-//       {
-//         data: [33, 33, 33],
-//         backgroundColor: ["#0694a2", "#1c64f2", "#7e3af2"],
-//         label: "Dataset 1",
-//       },
-//     ],
-//     labels: ["Shoes", "Shirts", "Bags"],
-//   },
-//   options: { responsive: true, cutoutPercentage: 80 },
-// };
-
-// const lineOptions = {
-//   data: {
-//     labels: ["January", "February", "March", "April", "May", "June", "July"],
-//     datasets: [
-//       {
-//         label: "Organic",
-//         backgroundColor: "#0694a2",
-//         borderColor: "#0694a2",
-//         data: [43, 48, 40, 54, 67, 73, 70],
-//         fill: false,
-//       },
-//       {
-//         label: "Paid",
-//         backgroundColor: "#7e3af2",
-//         borderColor: "#7e3af2",
-//         data: [24, 50, 64, 74, 52, 51, 65],
-//         fill: false,
-//       },
-//     ],
-//   },
-//   options: { responsive: true },
-// };
-
 function Dashboard() {
-  // const [page, setPage] = useState<number>(1);
-  // const [data, setData] = useState<User[]>([]);
-  // const resultsPerPage = 10;
-  // const totalResults = response.length;
-
-  // const user = JSON.parse(localStorage.getItem("user")!);
-
-  // useEffect(() => {
-  //   setData(response.slice((page - 1) * resultsPerPage, page * resultsPerPage));
-  // }, [page]);
-
-  // const onPageChange = (p: number) => {
-  //   setPage(p);
-  // };
-
-  // const addClassByStatus = (status: string): string => {
-  //   switch (status) {
-  //     case "primary":
-  //       return "status-primary";
-  //     case "danger":
-  //       return "status-danger";
-  //     case "success":
-  //       return "status-success";
-  //     case "warning":
-  //       return "status-warning";
-  //     case "neutral":
-  //       return "status-neutral";
-  //     default:
-  //       return "";
-  //   }
-  // };
-
+  useEffect(() => {
+    document.title = "Dashboard - BMQ";
+  }, []);
   return (
     <div className="c">
       <div className="dashboard">

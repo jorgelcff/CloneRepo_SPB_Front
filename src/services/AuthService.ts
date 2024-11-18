@@ -1,4 +1,5 @@
 import HttpService from "./HttpService";
+import { response } from "../utils/demo/tableData";
 
 interface LoginResponse {
   access_token: string;
@@ -41,7 +42,13 @@ class AuthService extends HttpService {
   }
 
   async register(userData: RegisterData): Promise<unknown> {
-    return this.post("/auth/register", userData);
+    const response = await this.post("/auth/register", userData);
+
+    if (response.access_token) {
+      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("access_token", response.access_token);
+    }
+    return response;
   }
 
   isAuthenticated(): boolean {

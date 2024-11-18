@@ -9,13 +9,20 @@ const orderService = new OrderService();
 const Orders: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<OrderResponse>(); // Altere para o tipo Order
+  const [paginatedOrders, setPaginatedOrders] = useState<Order[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | undefined>(
     undefined
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  const resultsPerPage = 5;
+
   const user = JSON.parse(localStorage.getItem("user")!);
+
+  useEffect(() => {
+    document.title = "Admin Pedidos - BMQ";
+  }, []);
 
   useEffect(() => {
     getOrdersData();
@@ -28,6 +35,7 @@ const Orders: React.FC = () => {
         user.id
       );
       setData(response);
+      setPage(1);
     } catch (error) {
       console.error(error);
     }
@@ -73,12 +81,14 @@ const Orders: React.FC = () => {
     }
   };
 
-  const resultsPerPage = 5;
-  const totalResults = data?.length;
-
   useEffect(() => {
-    setData(data?.slice((page - 1) * resultsPerPage, page * resultsPerPage));
-  }, [page]);
+    // Atualizar os pedidos paginados quando `data` ou `page` mudar
+    const startIndex = (page - 1) * resultsPerPage;
+    const endIndex = startIndex + resultsPerPage;
+    if (data) {
+      setPaginatedOrders(data.slice(startIndex, endIndex));
+    }
+  }, [data, page]);
 
   const onPageChange = (p: number) => {
     setPage(p);
@@ -142,7 +152,7 @@ const Orders: React.FC = () => {
                 ))}
               </>
             ) : (
-              data?.map((order, i) => (
+              paginatedOrders?.map((order, i) => (
                 <tr key={i}>
                   <td>
                     <div className="user-name">
@@ -179,7 +189,7 @@ const Orders: React.FC = () => {
           </button>
           <button
             onClick={() => onPageChange(page + 1)}
-            disabled={page * resultsPerPage >= totalResults!}
+            disabled={page * resultsPerPage >= data?.length!}
           >
             Próximo
           </button>

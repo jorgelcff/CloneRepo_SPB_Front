@@ -2,13 +2,24 @@ import { useEffect, useState } from "react";
 import "./styles.css";
 import { Card } from "../../components/card/card";
 import ProductService from "../../services/ProductSerivce";
+import AddToCartModal from "../../components/modal-add-product";
+import CartService from "../../services/CartService";
 
 const productService = new ProductService();
+const cartService = new CartService();
 
 const Home: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [cart, setCart] = useState<any[]>([]);
+
+  const user = JSON.parse(localStorage.getItem("user")!);
+
+  useEffect(() => {
+    document.title = "Home - BMQ";
+  }, []);
 
   useEffect(() => {
     getProductsData();
@@ -25,23 +36,28 @@ const Home: React.FC = () => {
     setIsLoading(false);
   };
 
-  const addToCart = (product: any) => {
-    setCart((prevCart) => {
-      // Verifica se o produto já está no carrinho
-      const existingProduct = prevCart.find((item) => item.id === product.id);
+  const handleAddToCart = async (product: any, quantity: number) => {
+    try {
+      await cartService.addItemToCart(user.id, {
+        productId: product.id,
+        quantity,
+      });
+      setCart((prevCart) => {
+        const existingProduct = prevCart.find((item) => item.id === product.id);
 
-      if (existingProduct) {
-        // Atualiza a quantidade do produto existente
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
+        if (existingProduct) {
+          return prevCart.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+        }
 
-      // Adiciona o novo produto ao carrinho
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
+        return [...prevCart, { ...product, quantity }];
+      });
+    } catch (error) {
+      console.error("Erro ao adicionar item ao carrinho:", error);
+    }
   };
 
   return (
@@ -84,11 +100,20 @@ const Home: React.FC = () => {
               title={product.name}
               price={product.price}
               image={product.image}
-              onAddToCart={() => addToCart(product)}
+              onAddToCart={() => {
+                setSelectedProduct(product);
+                setIsModalOpen(true);
+              }}
             />
           ))}
         </div>
       )}
+      <AddToCartModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddToCart={handleAddToCart}
+        product={selectedProduct}
+      />
     </div>
   );
 };

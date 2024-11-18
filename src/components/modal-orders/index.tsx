@@ -104,6 +104,11 @@ const OrderModal: React.FC<OrderModalProps> = ({
           <div className="input-group">
             <label htmlFor="status">Status</label>
             <select
+              style={{
+                cursor:
+                  order && status === "COMPLETED" ? "not-allowed" : "auto",
+              }}
+              disabled={order && status === "COMPLETED"}
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
