@@ -36,9 +36,17 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
       setNotification(
         "Você precisa estar logado para adicionar produtos ao carrinho."
       );
+
       setTimeout(() => {
         navigation("/login");
       }, 2000);
+      return;
+    }
+
+    if (user.role == "ADMIN") {
+      setNotification(
+        "Administradores não podem adicionar produtos ao carrinho."
+      );
       return;
     }
     onAddToCart(product, quantity);
