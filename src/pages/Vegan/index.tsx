@@ -18,7 +18,7 @@ const VeganPage: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user")!);
 
   useEffect(() => {
-    document.title = "Pele - BMQ";
+    document.title = "Vegan - BMQ";
   }, []);
 
   useEffect(() => {

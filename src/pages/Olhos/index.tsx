@@ -18,7 +18,7 @@ const OlhosPage: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user")!);
 
   useEffect(() => {
-    document.title = "Pele - BMQ";
+    document.title = "Olhos - BMQ";
   }, []);
 
   useEffect(() => {
