@@ -9,6 +9,7 @@
   box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
   padding: 10px; /* Espaçamento interno do card */
   overflow: hidden;
+  max-height: 380px; /* Altura máxima do card */
   margin: 10px; /* Espaçamento externo entre os cards */
 }
 

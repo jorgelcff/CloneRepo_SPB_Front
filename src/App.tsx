@@ -11,6 +11,11 @@ import Orders from "./pages/orders";
 import CartPage from "./pages/Cart";
 import UserLayout from "./components/layout-user";
 import Register from "./pages/Register";
+import SkincarePage from "./pages/Skincare";
+import PelePage from "./pages/Pele";
+import OlhosPage from "./pages/Olhos";
+import BocaPage from "./pages/Boca";
+import VeganPage from "./pages/Vegan";
 
 function App() {
   return (
@@ -28,11 +33,11 @@ function App() {
             path="/cart"
             element={<ProtectedRoute element={<CartPage />} />}
           />
-          <Route path="/skincare" element={<div>Skincare Page</div>} />
-          <Route path="/pele" element={<div>Pele Page</div>} />
-          <Route path="/olhos" element={<div>Olhos Page</div>} />
-          <Route path="/boca" element={<div>Boca Page</div>} />
-          <Route path="/vegan" element={<div>Vegan Page</div>} />
+          <Route path="/skincare" element={<SkincarePage />} />
+          <Route path="/pele" element={<PelePage />} />
+          <Route path="/olhos" element={<OlhosPage />} />
+          <Route path="/boca" element={<BocaPage />} />
+          <Route path="/vegan" element={<VeganPage />} />
         </Route>
 
         <Route path="/admin" element={<ProtectedRoute element={<Layout />} />}>

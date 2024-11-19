@@ -5,8 +5,10 @@ class ProductService extends HttpService {
     super();
   }
 
-  getAllProducts() {
-    return this.get(`/product`);
+  getAllProducts(categoriaId?: string) {
+    return this.get(
+      `/product${categoriaId ? `?categoryId=${categoriaId}` : ""}`
+    );
   }
 
   getProductById(productId: string) {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -24,9 +25,22 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   product,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const [notification, setNotification] = useState<string | null>(null);
+
+  const navigation = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user?.id) {
+      setNotification(
+        "Você precisa estar logado para adicionar produtos ao carrinho."
+      );
+      setTimeout(() => {
+        navigation("/login");
+      }, 2000);
+      return;
+    }
     onAddToCart(product, quantity);
     onClose();
   };
@@ -96,6 +110,17 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
             </button>
           </div>
         </form>
+        {notification && (
+          <p
+            style={{
+              color: "red",
+              textAlign: "center",
+              marginTop: "1rem",
+            }}
+          >
+            {notification}
+          </p>
+        )}
       </div>
     </div>
   );

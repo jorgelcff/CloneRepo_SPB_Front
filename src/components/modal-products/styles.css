@@ -47,8 +47,14 @@
   color: #333;
   /* Adicione esta linha */
 }
-.save-button,
-.cancel-button {
+
+.button-group-products {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.button-group-products .save-button-products,
+.cancel-button-products {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
@@ -56,12 +62,12 @@
   margin-right: 10px;
 }
 
-.save-button {
+.button-group-products .save-button-products {
   background-color: #4caf50;
   color: white;
 }
 
-.cancel-button {
+.button-group-products .cancel-button-products {
   background-color: #f44336;
   color: white;
 }

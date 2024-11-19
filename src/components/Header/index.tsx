@@ -16,7 +16,7 @@ const Header: React.FC = () => {
     window.location.href = "/login";
   };
 
-  const disableLinks = true;
+  const disableLinks = false;
 
   return (
     <header className="header">

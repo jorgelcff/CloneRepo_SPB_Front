@@ -68,7 +68,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>{product ? "Editar Produto" : "Adicionar Produto"}</h2>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "1.5rem",
+          }}
+        >
+          {product ? "Editar Produto" : "Adicionar Produto"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="name">Nome</label>
@@ -123,20 +130,34 @@ const ProductModal: React.FC<ProductModalProps> = ({
           </div>
           <div className="input-group">
             <label htmlFor="categoryId">Categoria</label>
-            <input
-              type="text"
+            <select
               id="categoryId"
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               required
-            />
+            >
+              <option value="" disabled>
+                Selecione...
+              </option>
+              <option value="cat-1">Skincare</option>
+              <option value="cat-2">Pele</option>
+              <option value="cat-3">Olhos</option>
+              <option value="cat-4">Boca</option>
+              <option value="cat-5">Vegan</option>
+            </select>
           </div>
-          <button type="submit" className="save-button">
-            Salvar
-          </button>
-          <button type="button" className="cancel-button" onClick={onClose}>
-            Cancelar
-          </button>
+          <div className="button-group-products">
+            <button type="submit" className="save-button-products">
+              Salvar
+            </button>
+            <button
+              type="button"
+              className="cancel-button-products"
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+          </div>
         </form>
       </div>
     </div>
